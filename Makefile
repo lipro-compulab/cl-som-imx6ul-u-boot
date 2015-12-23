@@ -968,6 +968,11 @@ SPL: spl/u-boot-spl.bin FORCE
 u-boot-with-spl.imx u-boot-with-nand-spl.imx: SPL u-boot.bin FORCE
 	$(Q)$(MAKE) $(build)=arch/arm/imx-common $@
 
+u-boot-with-spl-cl.imx: SPL u-boot.img FORCE
+	@dd if=SPL of=$@ bs=1K seek=0 conv=notrunc 2>/dev/null
+	@dd if=u-boot.img of=$@ bs=1K seek=63 conv=notrunc 2>/dev/null
+	@ln -sf $@ u-boot.imx
+
 MKIMAGEFLAGS_u-boot.ubl = -n $(UBL_CONFIG) -T ublimage -e $(CONFIG_SYS_TEXT_BASE)
 
 u-boot.ubl: u-boot-with-spl.bin FORCE
